@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_0315/main.dart';
+import 'package:flutter_0315/pertemuan2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Pertemuan1 extends StatefulWidget {
   const Pertemuan1({Key? key, required this.title}) : super(key: key);
@@ -9,62 +12,90 @@ class Pertemuan1 extends StatefulWidget {
 }
 
 class _Pertemuan1State extends State<Pertemuan1> {
-  int _counter = 2;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-  void _testing() {
-  }
-
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+      body: Form(
+        key: _formKey,
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+          children: [
             TextFormField(
-              decoration: new InputDecoration(
-                  labelText: "Tes Input",
-                  hintText: "Teks yang akan diinput formatnya adalah sbb",
-              ),
-            ),
-            Padding (
-              padding: EdgeInsets.all(5.0),
-            ),
-            TextFormField(
-              decoration: new InputDecoration(
-                labelText: "Tes Input 2",
-                hintText: "Teks yang akan diinput formatnya adalah sbb",
+              decoration: InputDecoration(
+                hintText: "contoh: Ferry",
+                labelText: "Nama",
+                icon: Icon(Icons.assignment_ind),
                 border: OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(5)
-                )
+                      borderRadius: new BorderRadius.circular(5.0)),
               ),
+              validator: (value){
+                if (value!.isEmpty){
+                  return 'Nama tidak boleh kosong';
+                }
+                return null;
+              },
             ),
             ElevatedButton(
-              onPressed: _testing,
                 child: Text(
-                  "Simpan",
-                  style: TextStyle(
-                    color: Colors.white
-                  ),
-                )
-            )
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+              onPressed: (){
+                  if (_formKey.currentState!.validate()){}
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "Logout",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () async{
+                SharedPreferences pref = await SharedPreferences.getInstance();
+                await pref.setInt("is_login",1);
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                    builder: (context) => Pertemuan2(title: "Halo Push",)),
+                );
+              },
+            ),
+            ElevatedButton(
+              onPressed: (){
+
+            }, child: const Text(
+              "Test Elevated Button"
+            ),
+              onLongPress: (){
+              showDialog<String>(
+              context: context, 
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('AlerDialog Tittle'),
+                content: const Text('AlertDialog description'),
+                actions: <Widget>[
+                TextButton(onPressed: () => Navigator.pop(context, 'cancel'),
+    child: const Text('Cancel'),
+    ),
+    TextButton(onPressed: () => Navigator.pop(context, 'OK'),
+    child: const Text('OK'),
+    ),
+              ],
+                ),
+              );
+              },
+            ),
           ],
+          ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+
   }
+  @override
+  void initState() {
+
+  }
+
 }
