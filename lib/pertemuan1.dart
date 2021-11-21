@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_0315/dashboard.dart';
 import 'package:flutter_0315/main.dart';
 import 'package:flutter_0315/pertemuan2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,9 +57,9 @@ class _Pertemuan1State extends State<Pertemuan1> {
               ),
               onPressed: () async{
                 SharedPreferences pref = await SharedPreferences.getInstance();
-                await pref.setInt("is_login",1);
+                await pref.setInt("is_login",0);
                 Navigator.pushReplacement(context, MaterialPageRoute(
-                    builder: (context) => Pertemuan2(title: "Halo Push",)),
+                    builder: (context) => Dashboard(title: "Halo Push",)),
                 );
               },
             ),
